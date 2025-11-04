@@ -7,7 +7,6 @@ import com.tpi.catalogos.domain.model.CatalogoService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,22 +26,24 @@ public class CatalogoRepositoryAdapter implements CatalogoService {
 
     // Camion mappings and operations
     private Camion mapToDomain(JpaCamionEntity entity) {
-        return new Camion(
-                entity.getId(),
-                entity.getPatente(),
-                entity.getModelo(),
-                entity.getCapacidadCarga(),
-                entity.getEstado()
-        );
+        return Camion.builder()
+                .id(entity.getId())
+                .patente(entity.getPatente())
+                .capacidadKg(entity.getCapacidadKg())
+                .volumenM3(entity.getVolumenM3())
+                .tipo(entity.getTipo())
+                .activo(entity.isActivo())
+                .build();
     }
 
     private JpaCamionEntity mapToEntity(Camion domain) {
         return new JpaCamionEntity(
                 domain.getId(),
                 domain.getPatente(),
-                domain.getModelo(),
-                domain.getCapacidadCarga(),
-                domain.getEstado()
+                domain.getCapacidadKg(),
+                domain.getVolumenM3(),
+                domain.getTipo(),
+                domain.isActivo()
         );
     }
 
@@ -54,40 +55,21 @@ public class CatalogoRepositoryAdapter implements CatalogoService {
     }
 
     @Override
-    public Optional<Camion> getCamionById(Long id) {
-        return camionRepository.findById(id).map(this::mapToDomain);
-    }
-
-    @Override
-    public Camion saveCamion(Camion camion) {
+    public Camion crearCamion(Camion camion) {
         JpaCamionEntity entity = mapToEntity(camion);
         return mapToDomain(camionRepository.save(entity));
     }
 
-    @Override
-    public void deleteCamion(Long id) {
-        camionRepository.deleteById(id);
-    }
-
     // Deposito mappings and operations
     private Deposito mapToDomain(JpaDepositoEntity entity) {
-        return new Deposito(
-                entity.getId(),
-                entity.getNombre(),
-                entity.getDireccion(),
-                entity.getCapacidadMaxima(),
-                entity.getEstado()
-        );
-    }
-
-    private JpaDepositoEntity mapToEntity(Deposito domain) {
-        return new JpaDepositoEntity(
-                domain.getId(),
-                domain.getNombre(),
-                domain.getDireccion(),
-                domain.getCapacidadMaxima(),
-                domain.getEstado()
-        );
+        return Deposito.builder()
+                .id(entity.getId())
+                .nombre(entity.getNombre())
+                .direccion(entity.getDireccion())
+                .lat(entity.getLat())
+                .lng(entity.getLng())
+                .activo(entity.isActivo())
+                .build();
     }
 
     @Override
@@ -97,63 +79,38 @@ public class CatalogoRepositoryAdapter implements CatalogoService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public Optional<Deposito> getDepositoById(Long id) {
-        return depositoRepository.findById(id).map(this::mapToDomain);
-    }
-
-    @Override
-    public Deposito saveDeposito(Deposito deposito) {
-        JpaDepositoEntity entity = mapToEntity(deposito);
-        return mapToDomain(depositoRepository.save(entity));
-    }
-
-    @Override
-    public void deleteDeposito(Long id) {
-        depositoRepository.deleteById(id);
-    }
-
     // Tarifa mappings and operations
     private Tarifa mapToDomain(JpaTarifaEntity entity) {
-        return new Tarifa(
-                entity.getId(),
-                entity.getTipo(),
-                entity.getPrecio(),
-                entity.getDescripcion(),
-                entity.getEstado()
-        );
+        return Tarifa.builder()
+                .id(entity.getId())
+                .nombre(entity.getNombre())
+                .precioBase(entity.getPrecioBase())
+                .precioKm(entity.getPrecioKm())
+                .precioKg(entity.getPrecioKg())
+                .precioM3(entity.getPrecioM3())
+                .vigenciaDesde(entity.getVigenciaDesde())
+                .vigenciaHasta(entity.getVigenciaHasta())
+                .activa(entity.isActiva())
+                .build();
     }
 
     private JpaTarifaEntity mapToEntity(Tarifa domain) {
         return new JpaTarifaEntity(
                 domain.getId(),
-                domain.getTipo(),
-                domain.getPrecio(),
-                domain.getDescripcion(),
-                domain.getEstado()
+                domain.getNombre(),
+                domain.getPrecioBase(),
+                domain.getPrecioKm(),
+                domain.getPrecioKg(),
+                domain.getPrecioM3(),
+                domain.getVigenciaDesde(),
+                domain.getVigenciaHasta(),
+                domain.isActiva()
         );
     }
 
     @Override
-    public List<Tarifa> getAllTarifas() {
-        return tarifaRepository.findAll().stream()
-                .map(this::mapToDomain)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public Optional<Tarifa> getTarifaById(Long id) {
-        return tarifaRepository.findById(id).map(this::mapToDomain);
-    }
-
-    @Override
-    public Tarifa saveTarifa(Tarifa tarifa) {
+    public Tarifa crearTarifa(Tarifa tarifa) {
         JpaTarifaEntity entity = mapToEntity(tarifa);
         return mapToDomain(tarifaRepository.save(entity));
-    }
-
-    @Override
-    public void deleteTarifa(Long id) {
-        tarifaRepository.deleteById(id);
     }
 }

@@ -19,6 +19,26 @@ public class Tarifa {
     LocalDate vigenciaHasta;
     boolean activa;
 
+    public static Tarifa crearNueva(
+            String nombre,
+            BigDecimal precioBase,
+            BigDecimal precioKm,
+            BigDecimal precioKg,
+            BigDecimal precioM3,
+            LocalDate vigenciaDesde,
+            LocalDate vigenciaHasta) {
+        return Tarifa.builder()
+                .nombre(nombre)
+                .precioBase(precioBase)
+                .precioKm(precioKm)
+                .precioKg(precioKg)
+                .precioM3(precioM3)
+                .vigenciaDesde(vigenciaDesde)
+                .vigenciaHasta(vigenciaHasta)
+                .activa(true)
+                .build();
+    }
+
     public boolean isVigente(LocalDate fecha) {
         return activa &&
                (fecha.isEqual(vigenciaDesde) || fecha.isAfter(vigenciaDesde)) &&

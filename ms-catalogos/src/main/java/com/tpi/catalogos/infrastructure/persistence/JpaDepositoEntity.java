@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.math.BigDecimal;
+import java.util.UUID;
 
 @Entity
 @Table(name = "depositos")
@@ -12,8 +14,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class JpaDepositoEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     
     @Column(nullable = false)
     private String nombre;
@@ -21,9 +23,12 @@ public class JpaDepositoEntity {
     @Column(nullable = false)
     private String direccion;
     
-    @Column(name = "capacidad_maxima", nullable = false)
-    private Double capacidadMaxima;
+    @Column(nullable = false)
+    private BigDecimal lat;
     
     @Column(nullable = false)
-    private String estado;
+    private BigDecimal lng;
+    
+    @Column(nullable = false)
+    private boolean activo = true;
 }

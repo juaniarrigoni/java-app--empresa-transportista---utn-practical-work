@@ -12,7 +12,7 @@ public class Camion {
     String patente;
     BigDecimal capacidadKg;
     BigDecimal volumenM3;
-    String tipo;  // "Sider", "Chasis", "Tractor"
+    String tipo;
     boolean activo;
 
     public boolean isTipoValido() {
@@ -20,5 +20,15 @@ public class Camion {
                (tipo.equals("Sider") || 
                 tipo.equals("Chasis") || 
                 tipo.equals("Tractor"));
+    }
+
+    public static Camion crearNuevo(String patente, BigDecimal capacidadKg, BigDecimal volumenM3, String tipo) {
+        return Camion.builder()
+                .patente(patente)
+                .capacidadKg(capacidadKg)
+                .volumenM3(volumenM3)
+                .tipo(tipo)
+                .activo(true)
+                .build();
     }
 }

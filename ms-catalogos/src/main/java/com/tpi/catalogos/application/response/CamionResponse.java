@@ -1,12 +1,15 @@
 package com.tpi.catalogos.application.response;
 
 import lombok.Data;
+import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 public class CamionResponse {
-    private Long id;
+    private UUID id;
     private String patente;
-    private String modelo;
-    private Double capacidadCarga;
-    private String estado;
+    private BigDecimal capacidadKg;
+    private BigDecimal volumenM3;
+    private String tipo;
+    private boolean activo;
 }
