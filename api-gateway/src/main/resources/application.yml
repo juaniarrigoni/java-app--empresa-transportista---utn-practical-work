@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lowerCaseServiceId: true
+      routes:
+        - id: ms-catalogos
+          uri: lb://ms-catalogos
+          predicates:
+            - Path=/api/catalogos/**
+        - id: ms-solicitudes
+          uri: lb://ms-solicitudes
+          predicates:
+            - Path=/api/solicitudes/**
+        - id: ms-operaciones
+          uri: lb://ms-operaciones
+          predicates:
+            - Path=/api/operaciones/**
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    preferIpAddress: true
